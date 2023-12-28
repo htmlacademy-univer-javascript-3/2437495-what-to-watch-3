@@ -1,39 +1,50 @@
 import React, { useState, useCallback } from 'react';
+import { useAppDispatch } from '../../hooks/store';
+import { useNavigate } from 'react-router-dom';
+import { addReview } from '../../store/api-actions';
 
 const RATING = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
+const MAX_LEN_REVIEW = 400;
+const MIN_LEN_REVIEW = 50;
 interface AddReviewFormProps {
-  onSubmit: (rating: string, reviewText: string) => void;
+  filmId: string;
 }
 
-const AddReviewComponent: React.FC<AddReviewFormProps> = ({ onSubmit }) => {
+const AddReviewComponent: React.FC<AddReviewFormProps> = ({ filmId }) => {
   const [rating, setRating] = useState('');
   const [reviewText, setReviewText] = useState('');
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleRatingChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setRating(e.target.value);
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRating(event.target.value);
     },
     []
   );
 
   const handleReviewTextChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setReviewText(e.target.value);
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setReviewText(event.target.value);
     },
     []
   );
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      onSubmit(rating, reviewText);
+    (event: React.FormEvent) => {
+      event.preventDefault();
 
-      setRating('');
-      setReviewText('');
+      dispatch(
+        addReview({ filmId: filmId, rating: +rating, comment: reviewText })
+      ).then(() => {
+        navigate(`/films/${filmId}`);
+      });
     },
-    [onSubmit, rating, reviewText]
+    [dispatch, filmId, navigate, rating, reviewText]
   );
+
+  const isDisabled = !rating || !reviewText || reviewText.length < MIN_LEN_REVIEW || reviewText.length > MAX_LEN_REVIEW;
 
   return (
     <div className="add-review">
@@ -69,7 +80,7 @@ const AddReviewComponent: React.FC<AddReviewFormProps> = ({ onSubmit }) => {
             onChange={handleReviewTextChange}
           />
           <div className="add-review__submit">
-            <button className="add-review__btn" type="submit">
+            <button className="add-review__btn" type="submit" disabled={isDisabled}>
               Post
             </button>
           </div>

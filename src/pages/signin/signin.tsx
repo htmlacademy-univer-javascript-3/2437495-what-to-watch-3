@@ -1,51 +1,148 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  forwardRef,
+  memo,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { login } from '../../store/api-actions';
+import { ReducerName } from '../../types/reducer-name';
+import { AuthorizationStatus } from '../../types/authorization-status';
+import { Header } from '../../components/header';
+import { Footer } from '../../components/footer';
+import { errorHandle } from '../../services/error-handle';
 
-const SignInPage: React.FC = () => (
-  <div className="user-page">
-    <header className="page-header user-page__head">
-      <div className="logo">
-        <Link to="main.html" className="logo__link">
-          <span className="logo__letter logo__letter--1">W</span>
-          <span className="logo__letter logo__letter--2">T</span>
-          <span className="logo__letter logo__letter--3">W</span>
-        </Link>
-      </div>
+interface FormFieldProps {
+  type: string;
+  name: string;
+  id: string;
+  placeholder: string;
+  label: string;
+  value?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-      <h1 className="page-title user-page__title">Sign in</h1>
-    </header>
-
-    <div className="sign-in user-page__content">
-      <form action="#" className="sign-in__form">
-        <div className="sign-in__fields">
-          <div className="sign-in__field">
-            <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" />
-            <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>
-          </div>
-          <div className="sign-in__field">
-            <input className="sign-in__input" type="password" placeholder="Password" name="user-password" id="user-password" />
-            <label className="sign-in__label visually-hidden" htmlFor="user-password">Password</label>
-          </div>
-        </div>
-        <div className="sign-in__submit">
-          <button className="sign-in__btn" type="submit">Sign in</button>
-        </div>
-      </form>
+const FormFieldComponent = forwardRef<HTMLInputElement, FormFieldProps>(
+  ({ type, name, id, placeholder, label, value = '', onChange }, ref) => (
+    <div className="sign-in__field">
+      <input
+        ref={ref}
+        className="sign-in__input"
+        required
+        type={type}
+        placeholder={placeholder}
+        name={name}
+        id={id}
+        value={value}
+        onChange={onChange}
+      />
+      <label className="sign-in__label visually-hidden" htmlFor={id}>
+        {label}
+      </label>
     </div>
-
-    <footer className="page-footer">
-      <div className="logo">
-        <Link to="main.html" className="logo__link logo__link--light">
-          <span className="logo__letter logo__letter--1">W</span>
-          <span className="logo__letter logo__letter--2">T</span>
-          <span className="logo__letter logo__letter--3">W</span>
-        </Link>
-      </div>
-
-      <div className="copyright">
-        <p>© 2019 What to watch Ltd.</p>
-      </div>
-    </footer>
-  </div>
+  )
 );
-export const SignIn = React.memo(SignInPage);
+
+FormFieldComponent.displayName = 'FormField';
+
+const FormField = memo(FormFieldComponent);
+
+const SignInPage: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(
+    (state) => state[ReducerName.Authorzation].authorizationStatus
+  );
+  const error = useAppSelector((state) => state[ReducerName.Main].error);
+
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!emailPattern.test(email)) {
+        return errorHandle('Please enter a valid email address');
+      }
+
+      if (/[a-z]/i.test(password) && /[0-9]/.test(password)) {
+        dispatch(login({ email: email, password: password }));
+      } else {
+        errorHandle('Passwords must contain: a minimum of 1 letter and a minimum of 1 numeric character');
+      }
+    },
+    [dispatch, email, password]
+  );
+
+
+  const handleEmail = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  }, []);
+  const handlePassword = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  }, []);
+
+  const pageTitle = useMemo(() => <h1 className="page-title user-page__title">Sign in</h1>, []);
+
+  if (authStatus === AuthorizationStatus.AUTHORIZED) {
+    return <Navigate to="/" />;
+  }
+
+  return (
+    <div className="user-page">
+      <Header className="user-page__head" isLoginPage>
+        {pageTitle}
+      </Header>
+
+      <div className="sign-in user-page__content">
+        <form onSubmit={handleSubmit} className="sign-in__form">
+          {error && (
+            <div className="sign-in__message">
+              <p>{error}</p>
+            </div>
+          )}
+          <div className="sign-in__fields">
+            <FormField
+              type="email"
+              name="user-email"
+              id="user-email"
+              placeholder="Email address"
+              label="Email address"
+              value={emailRef?.current?.value}
+              onChange={handleEmail}
+              ref={emailRef}
+            />
+            <FormField
+              type="password"
+              name="user-password"
+              id="user-password"
+              placeholder="Password"
+              label="Password"
+              value={passwordRef?.current?.value}
+              ref={passwordRef}
+              onChange={handlePassword}
+            />
+          </div>
+          <div className="sign-in__submit">
+            <button className="sign-in__btn" type="submit">
+              Sign in
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <Footer />
+    </div>
+  );
+};
+
+export const SignIn = memo(SignInPage);

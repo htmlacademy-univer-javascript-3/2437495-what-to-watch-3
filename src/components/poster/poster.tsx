@@ -3,8 +3,8 @@ import React, { memo } from 'react';
 interface PosterProps {
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   className?: string;
 }
 

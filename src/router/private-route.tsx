@@ -1,12 +1,20 @@
 import { Navigate } from 'react-router-dom';
 import { FC } from 'react';
-import { RouteLinks } from './consts';
+import { useAppSelector } from '../hooks/store';
+import { AuthorizationStatus } from '../types/authorization-status';
+import { ReducerName } from '../types/reducer-name';
 
 interface PrivateRouteProps {
-  children: JSX.Element;
-  hasAccess?: boolean;
+  children: React.ReactElement;
 }
 
-const PrivateRoute: FC<PrivateRouteProps> = ({ children, hasAccess = true }) => hasAccess ? children : <Navigate to={RouteLinks.LOGIN} />;
+const PrivateRoute: FC<PrivateRouteProps> = ({ children }) => {
+  const authorizationStatus = useAppSelector(
+    (state) => state[ReducerName.Authorzation].authorizationStatus
+  );
+  const notAuth = authorizationStatus === AuthorizationStatus.NOT_AUTHORIZED;
+
+  return !notAuth ? children : <Navigate to={'/login'} />;
+};
 
 export default PrivateRoute;

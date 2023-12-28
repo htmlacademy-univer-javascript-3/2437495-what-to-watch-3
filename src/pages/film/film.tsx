@@ -1,43 +1,73 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Header } from '../../components/header';
 import { FilmCardButtons } from '../../components/film-card/components/film-card-buttons';
 import { FilmsList } from '../../components/catalog/components/films-list';
 import { Footer } from '../../components/footer';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { useFilmById, useFilmRating } from '../../hooks/films';
+import { Navigate, useParams } from 'react-router-dom';
 import { RouteLinks } from '../../router/consts';
 import { Poster } from '../../components/poster';
-
-const FEW_FILM_LIST = 4;
+import { FilmDescription } from '../../components/film-description/film-description';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { Spinner } from '../../components/spinner/spinner';
+import { ReducerName } from '../../types/reducer-name';
+import { fetchFilm, fetchReviews, fetchSimilar } from '../../store/api-actions';
+import { AuthorizationStatus } from '../../types/authorization-status';
+import { Page404 } from '../page-404';
 
 const FilmPage: React.FC = () => {
   const { id } = useParams();
-  const film = useFilmById(id);
-  const filmRatingLevel = useFilmRating(film?.rating);
 
-  if (!film) {
+  const isAuth =
+    useAppSelector(
+      (state) => state[ReducerName.Authorzation].authorizationStatus
+    ) === AuthorizationStatus.AUTHORIZED;
+
+  const dispatch = useAppDispatch();
+  const film = useAppSelector((state) => state[ReducerName.Film].film);
+  const isLoading = useAppSelector(
+    (state) => state[ReducerName.Film].isLoading
+  );
+
+  const similar = useAppSelector((state) => state[ReducerName.Film].similar);
+
+  useLayoutEffect(() => {
+    if (id) {
+      dispatch(fetchFilm(id));
+      dispatch(fetchSimilar(id));
+      dispatch(fetchReviews(id));
+    }
+  }, [id, dispatch]);
+
+  if (isLoading) {
+    return <Spinner fullDisplay />;
+  }
+
+  if (!id) {
     return <Navigate to={RouteLinks.NOT_FOUND} />;
   }
 
-  return (
+  return film ? (
     <>
-      <section className="film-card film-card--full">
+      <section
+        className="film-card film-card--full"
+        style={{ backgroundColor: film.backgroundColor }}
+      >
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src={film.bgSrc} alt={film.imageSrc} />
+            <img src={film.backgroundImage} alt={film.name} />
           </div>
 
           <Header className="film-card__head" />
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">{film.title}</h2>
+              <h2 className="film-card__title">{film.name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{film.genre}</span>
-                <span className="film-card__year">{film.year}</span>
+                <span className="film-card__year">{film.released}</span>
               </p>
 
-              <FilmCardButtons reviewButton />
+              <FilmCardButtons filmId={film.id} reviewButton={isAuth} isFavorite={film.isFavorite} />
             </div>
           </div>
         </div>
@@ -45,70 +75,28 @@ const FilmPage: React.FC = () => {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <Poster
-              src={film.imageSrc}
-              alt={film.alt}
-              width={film.width}
-              height={film.height}
+              src={film.posterImage}
+              alt={film.name}
               className="film-card__poster--big"
             />
 
-            <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <Link to="#" className="film-nav__link">
-                      Overview
-                    </Link>
-                  </li>
-                  <li className="film-nav__item">
-                    <Link to="#" className="film-nav__link">
-                      Details
-                    </Link>
-                  </li>
-                  <li className="film-nav__item">
-                    <Link to="#" className="film-nav__link">
-                      Reviews
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-
-              <div className="film-rating">
-                <div className="film-rating__score">{film.rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">{filmRatingLevel}</span>
-                  <span className="film-rating__count">
-                    {film.ratingCount} ratings
-                  </span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p style={{ whiteSpace: 'pre-wrap' }}>
-                  {film.description?.info}
-                </p>
-
-                <p className="film-card__director">
-                  <strong>Director: {film.description?.director}</strong>
-                </p>
-
-                <p className="film-card__starring">
-                  <strong>Starring: {film.description?.starring}</strong>
-                </p>
-              </div>
-            </div>
+            <FilmDescription film={film} />
           </div>
         </div>
       </section>
       <div className="page-content">
-        <section className="catalog catalog--like-this">
-          <h2 className="catalog__title">More like this</h2>
-          <FilmsList length={FEW_FILM_LIST} />
-        </section>
+        {!!similar.length && (
+          <section className="catalog catalog--like-this">
+            <h2 className="catalog__title">More like this</h2>
+            <FilmsList films={similar} />
+          </section>
+        )}
 
         <Footer />
       </div>
     </>
+  ) : (
+    <Page404 />
   );
 };
 export const Film = React.memo(FilmPage);

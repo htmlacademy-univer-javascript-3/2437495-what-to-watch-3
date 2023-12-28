@@ -26,8 +26,8 @@ const AppRouter: React.FC = () => (
         }
       />
       <Route path={RouteLinks.PLAYER} element={<Player />} />
-      <Route path={RouteLinks.FILMS}>
-        <Route path={RouteLinks.FILM} element={<Film />} />
+      <Route path={RouteLinks.FILM}>
+        <Route index element={<Film />} />
         <Route
           path={RouteLinks.REVIEW}
           element={

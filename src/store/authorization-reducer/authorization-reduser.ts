@@ -6,7 +6,7 @@ import { AuthorizationReducerState } from '../../types/authorization-reducer-sta
 import { AuthorizationStatus } from '../../types/authorization-status';
 
 const initialState: AuthorizationReducerState = {
-  authorizationStatus: AuthorizationStatus.NOT_AUTHORIZED,
+  authorizationStatus: AuthorizationStatus.IDLE,
   user: null,
 };
 

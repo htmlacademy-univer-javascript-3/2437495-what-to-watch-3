@@ -1,16 +1,18 @@
 import { FC, memo } from 'react';
 import { useFilmRating } from '../../../hooks/films';
-import { FilmInfoProps } from '../../../mocs/films';
+import { Film } from '../../../types/film';
 
 interface OverviewProps {
-  film: FilmInfoProps;
+  film: Film;
 }
 
 const OverviewComponent: FC<OverviewProps> = ({ film }) => {
   const {
     rating,
-    ratingCount,
-    description: { info, director, starring },
+    scoresCount,
+    director,
+    starring,
+    description,
   } = film;
 
   const filmRatingLevel = useFilmRating(rating);
@@ -21,18 +23,18 @@ const OverviewComponent: FC<OverviewProps> = ({ film }) => {
         <div className="film-rating__score">{rating}</div>
         <p className="film-rating__meta">
           <span className="film-rating__level">{filmRatingLevel}</span>
-          <span className="film-rating__count">{ratingCount} ratings</span>
+          <span className="film-rating__count">{scoresCount} ratings</span>
         </p>
       </div>
       <div className="film-card__text">
-        <p style={{ whiteSpace: 'pre-wrap' }}>{info}</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}>{description}</p>
 
         <p className="film-card__director">
           <strong>Director: {director}</strong>
         </p>
 
         <p className="film-card__starring">
-          <strong>Starring: {starring}</strong>
+          <strong>Starring: {starring.join(', ')}</strong>
         </p>
       </div>
     </>

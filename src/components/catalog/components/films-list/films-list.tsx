@@ -1,35 +1,55 @@
-import React, { useState } from 'react';
-import { filmsInfo } from '../../../../mocs/films.ts';
+import React, { useCallback, useState } from 'react';
 import { SmallFilmCard } from './small-film-card';
+import { useAppSelector } from '../../../../hooks/store';
+import { Spinner } from '../../../spinner/spinner';
+import { ReducerName } from '../../../../types/reducer-name';
+import { Film } from '../../../../types/film';
 
 interface FilmsListComponentProps {
-  length?: number;
+  maxLength?: number;
+  films?: Film[];
 }
 
 const FilmsListComponent: React.FC<FilmsListComponentProps> = ({
-  length = filmsInfo.length,
+  maxLength,
+  films,
 }) => {
-  const [activeFilm, setActiveFilm] = useState<number | null>(null);
+  const stateGenreFilms = useAppSelector(
+    (state) => state[ReducerName.Main].genreFilms
+  );
+  const isLoading = useAppSelector(
+    (state) => state[ReducerName.Main].isFilmsLoading
+  );
 
-  const handleCardHover = (filmId: number) => {
+  const [activeFilm, setActiveFilm] = useState<string | null>(null);
+
+  const handleCardHover = useCallback((filmId: string) => {
     setActiveFilm(filmId);
-  };
+  }, []);
 
-  const handleCardLeave = () => {
+  const handleCardLeave = useCallback(() => {
     setActiveFilm(null);
-  };
+  }, []);
+
+  const filteredFilms = films || stateGenreFilms;
 
   return (
     <div className="catalog__films-list">
-      {filmsInfo.slice(0, length).map((film) => (
-        <SmallFilmCard
-          film={film}
-          key={film.id}
-          isActive={film.id === activeFilm}
-          onMouseEnter={handleCardHover}
-          onMouseLeave={handleCardLeave}
-        />
-      ))}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        filteredFilms
+          .slice(0, maxLength)
+          .map((film) => (
+            <SmallFilmCard
+              film={film}
+              key={film.id}
+              isActive={film.id === activeFilm}
+              onMouseEnter={handleCardHover}
+              onMouseLeave={handleCardLeave}
+            />
+          ))
+      )}
     </div>
   );
 };

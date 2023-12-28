@@ -8,10 +8,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
   onClick?: () => void;
 }
 
-const ButtonComponent: React.FC<ButtonProps> = ({withChildren = false, label, children, className, type = 'button', onClick,}) => (
+const ButtonComponent: React.FC<ButtonProps> = ({
+  withChildren = false,
+  label,
+  children,
+  className,
+  type = 'button',
+  onClick,
+}) => (
   <button className={className} onClick={onClick} type={type}>
     {withChildren ? children : label}
   </button>
 );
 
-export const ShowMoreButton = memo(ButtonComponent);
+export const Button = memo(ButtonComponent);

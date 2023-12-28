@@ -12,7 +12,7 @@ const FilmInListPage: React.FC = () => (
 
         <header className="page-header film-card__head">
           <div className="logo">
-            <Link to="main.html" className="logo__link">
+            <Link to="/" className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
@@ -53,7 +53,7 @@ const FilmInListPage: React.FC = () => (
                 <span>My list</span>
                 <span className="film-card__count">9</span>
               </button>
-              <Link to="add-review.html" className="btn film-card__button">Add review</Link>
+              <Link to="/" className="btn film-card__button">Add review</Link>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@ const FilmInListPage: React.FC = () => (
               <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg" alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" />
             </div>
             <h3 className="small-film-card__title">
-              <Link className="small-film-card__link" to="film-page.html">Fantastic Beasts: The Crimes of Grindelwald</Link>
+              <Link className="small-film-card__link" to="/">Fantastic Beasts: The Crimes of Grindelwald</Link>
             </h3>
           </article>
 
@@ -121,7 +121,7 @@ const FilmInListPage: React.FC = () => (
               <img src="img/bohemian-rhapsody.jpg" alt="Bohemian Rhapsody" width="280" height="175" />
             </div>
             <h3 className="small-film-card__title">
-              <Link className="small-film-card__link" to="film-page.html">Bohemian Rhapsody</Link>
+              <Link className="small-film-card__link" to="/">Bohemian Rhapsody</Link>
             </h3>
           </article>
 
@@ -130,7 +130,7 @@ const FilmInListPage: React.FC = () => (
               <img src="img/macbeth.jpg" alt="Macbeth" width="280" height="175" />
             </div>
             <h3 className="small-film-card__title">
-              <Link className="small-film-card__link" to="film-page.html">Macbeth</Link>
+              <Link className="small-film-card__link" to="/">Macbeth</Link>
             </h3>
           </article>
 
@@ -139,7 +139,7 @@ const FilmInListPage: React.FC = () => (
               <img src="img/aviator.jpg" alt="Aviator" width="280" height="175" />
             </div>
             <h3 className="small-film-card__title">
-              <Link className="small-film-card__link" to="film-page.html">Aviator</Link>
+              <Link className="small-film-card__link" to="/">Aviator</Link>
             </h3>
           </article>
         </div>
@@ -147,7 +147,7 @@ const FilmInListPage: React.FC = () => (
 
       <footer className="page-footer">
         <div className="logo">
-          <Link to="main.html" className="logo__link logo__link--light">
+          <Link to="/" className="logo__link logo__link--light">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
