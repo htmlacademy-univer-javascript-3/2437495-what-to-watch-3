@@ -1,8 +1,14 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { RouteLinks } from '../../router/consts';
 
-const Logo: React.FC = () => (
+interface LogoProps {
+  className?: string;
+}
+
+const LogoComponent: React.FC<LogoProps> = ({ className }) => (
   <div className="logo">
-    <Link className="logo__link logo__link--light" to='/'>
+    <Link className={`logo__link ${className ? className : ''}`} to={RouteLinks.MAIN}>
       <span className="logo__letter logo__letter--1">W</span>
       <span className="logo__letter logo__letter--2">T</span>
       <span className="logo__letter logo__letter--3">W</span>
@@ -10,4 +16,4 @@ const Logo: React.FC = () => (
   </div>
 );
 
-export default Logo;
+export const Logo = React.memo(LogoComponent);

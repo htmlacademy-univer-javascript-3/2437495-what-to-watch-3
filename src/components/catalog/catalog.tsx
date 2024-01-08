@@ -1,41 +1,33 @@
-import * as React from 'react';
-import GENRES from '../../data/constants/genres';
-import SmallFilmCard from '../small-film-card/small-film-card.tsx';
-import GenresItem from './genres-item.tsx';
-import { SmallFilmCardProps } from '../small-film-card/small-film-card.types.ts';
+import React from 'react';
+import { GenreList } from './components/genre-list';
+import { FilmsList } from './components/films-list';
 
-export type CatalogProps = {
-  showGenres?: boolean;
-  cardList: SmallFilmCardProps[];
-};
+interface CatalogProps {
+  withoutGenre?: boolean;
+  withoutButton?: boolean;
+  listLength?: number;
+}
 
-
-const Catalog: React.FC<CatalogProps> = ({showGenres, cardList}) => (
+const CatalogComponent: React.FC<CatalogProps> = ({
+  withoutGenre = false,
+  withoutButton = false,
+  listLength
+}) => (
   <section className="catalog">
-    <h2 className="catalog__title visually-hidden">
-      Catalog
-    </h2>
+    <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-    {showGenres ?
-      <ul className="catalog__genres-list">
-        {GENRES.map((catalog) => (
-          <GenresItem catalog={catalog} key={catalog.title} />
-        ))}
-      </ul>
-      : null}
+    {!withoutGenre ? <GenreList /> : null}
 
-    <div className="catalog__films-list">
-      {cardList.map((card) => <SmallFilmCard {...card} key={card.title} />)}
-    </div>
+    <FilmsList length={listLength} />
 
-    {cardList.length >= 20 ?
+    {!withoutButton ? (
       <div className="catalog__more">
         <button className="catalog__button" type="button">
           Show more
         </button>
-      </div> : null}
+      </div>
+    ) : null}
   </section>
-
 );
 
-export default Catalog;
+export const Catalog = React.memo(CatalogComponent);

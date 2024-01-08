@@ -1,41 +1,43 @@
-import * as React from 'react';
-import Logo from '../logo/logo.tsx';
-import UserBlock from '../user-block/user-block.tsx';
-import Buttons from './buttons.tsx';
-import { FilmCardProps } from './film-card.types.ts';
+import React from 'react';
+import { Header } from '../header';
+import { FilmCardButtons } from './components/film-card-buttons';
+import { FilmProps } from './types';
+import { Poster } from '../poster';
 
-const FilmCard: React.FC<FilmCardProps> = ({film, myListCount }) => (
-  <section className="film-card">
-    <div className="film-card__bg">
-      <img src={film.poster.src} alt={film.poster.alt} />
-    </div>
+interface FilmCardProps {
+  film: FilmProps;
+}
+const WIDTH = 218;
+const HEIGHT = 327;
 
-    <h1 className="visually-hidden">WTW</h1>
+const FilmCardComponent: React.FC<FilmCardProps> = ({ film }) => {
+  const { img, title, genre, year } = film;
 
-    <header className="page-header film-card__head">
-      <Logo />
-      <UserBlock/>
-    </header>
+  return (
+    <section className="film-card">
+      <div className="film-card__bg">
+        <img src={img.bgSrc} alt={img.alt} />
+      </div>
 
-    <div className="film-card__wrap">
-      <div className="film-card__info">
-        <div className="film-card__poster">
-          <img src={film.poster.src} alt={film.poster.alt} width="218" height="327"/>
-        </div>
+      <Header className="film-card__head" />
 
-        <div className="film-card__desc">
-          <h2 className="film-card__title">{film.title}</h2>
-          <p className="film-card__meta">
-            <span className="film-card__genre">{film.genre}</span>
-            <span className="film-card__year">{film.year}</span>
-          </p>
+      <div className="film-card__wrap">
+        <div className="film-card__info">
+          <Poster src={img.src} alt={img.alt} width={WIDTH} height={HEIGHT} />
 
-          <Buttons myListCount={myListCount}/>
+          <div className="film-card__desc">
+            <h2 className="film-card__title">{title}</h2>
+            <p className="film-card__meta">
+              <span className="film-card__genre">{genre}</span>
+              <span className="film-card__year">{year}</span>
+            </p>
+
+            <FilmCardButtons />
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  );
+};
 
-);
-
-export default FilmCard;
+export const FilmCard = React.memo(FilmCardComponent);

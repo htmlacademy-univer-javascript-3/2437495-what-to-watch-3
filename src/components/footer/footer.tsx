@@ -1,12 +1,14 @@
-import Logo from '../logo/logo.tsx';
+import React from 'react';
+import { Logo } from '../logo';
 
-const Footer: React.FC = () => (
+const FooterComponent: React.FC = () => (
   <footer className="page-footer">
-    <Logo/>
+    <Logo className='logo__link--light' />
+
     <div className="copyright">
-      <p>© 2023 What to watch Ltd.</p>
+      <p>© 2019 What to watch Ltd.</p>
     </div>
   </footer>
 );
 
-export default Footer;
+export const Footer = React.memo(FooterComponent);
