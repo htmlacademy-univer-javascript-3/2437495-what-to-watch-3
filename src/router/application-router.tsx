@@ -6,12 +6,12 @@ import { Film } from '../pages/film';
 import { Main } from '../pages/main';
 import { MyList } from '../pages/my-list';
 import { Player } from '../pages/player';
-import { SignIn } from '../pages/signin';
-import { Page404 } from '../pages/page-404';
-import { RouteLinks } from './consts';
+import { SignIn } from '../pages/sign-in';
+import { NotFound404 } from '../pages/not-found-404';
+import { RouteLinks } from './route-links.ts';
 import { ScrollToTop } from '../components/scroll-to-top';
 
-const AppRouter: React.FC = () => (
+const ApplicationRouter: React.FC = () => (
   <BrowserRouter>
     <ScrollToTop />
     <Routes>
@@ -37,9 +37,9 @@ const AppRouter: React.FC = () => (
           }
         />
       </Route>
-      <Route path={RouteLinks.NOT_FOUND} element={<Page404 />} />
+      <Route path={RouteLinks.NOT_FOUND} element={<NotFound404 />} />
     </Routes>
   </BrowserRouter>
 );
 
-export default AppRouter;
+export default ApplicationRouter;

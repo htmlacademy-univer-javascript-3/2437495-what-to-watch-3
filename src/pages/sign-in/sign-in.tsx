@@ -12,10 +12,10 @@ import { Navigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { login } from '../../store/api-actions';
 import { ReducerName } from '../../types/reducer-name';
-import { AuthorizationStatus } from '../../types/authorization-status';
+import { AuthStatus } from '../../types/auth-status.ts';
 import { Header } from '../../components/header';
 import { Footer } from '../../components/footer';
-import { errorHandle } from '../../services/error-handle';
+import { errorHandler } from '../../services/error-handler.ts';
 
 interface FormFieldProps {
   type: string;
@@ -71,13 +71,13 @@ const SignInPage: React.FC = () => {
 
       const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       if (!emailPattern.test(email)) {
-        return errorHandle('Please enter a valid email address');
+        return errorHandler('Please enter a valid email address');
       }
 
       if (/[a-z]/i.test(password) && /[0-9]/.test(password)) {
         dispatch(login({ email: email, password: password }));
       } else {
-        errorHandle('Passwords must contain: a minimum of 1 letter and a minimum of 1 numeric character');
+        errorHandler('Passwords must contain: a minimum of 1 letter and a minimum of 1 numeric character');
       }
     },
     [dispatch, email, password]
@@ -93,7 +93,7 @@ const SignInPage: React.FC = () => {
 
   const pageTitle = useMemo(() => <h1 className="page-title user-page__title">Sign in</h1>, []);
 
-  if (authStatus === AuthorizationStatus.AUTHORIZED) {
+  if (authStatus === AuthStatus.AUTHORIZED) {
     return <Navigate to="/" />;
   }
 

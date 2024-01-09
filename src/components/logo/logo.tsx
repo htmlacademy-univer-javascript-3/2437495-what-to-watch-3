@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { RouteLinks } from '../../router/consts';
+import { RouteLinks } from '../../router/route-links.ts';
 
 interface LogoProps {
   className?: string;

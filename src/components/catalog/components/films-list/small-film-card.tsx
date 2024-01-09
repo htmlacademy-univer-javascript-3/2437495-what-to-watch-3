@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { RouteLinks } from '../../../../router/consts';
+import { RouteLinks } from '../../../../router/route-links.ts';
 import { VideoPlayer } from '../../../videoplayer';
 import { Film } from '../../../../types/film';
 

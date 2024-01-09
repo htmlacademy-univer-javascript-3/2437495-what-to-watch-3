@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { formatTime } from '../../hooks/films';
-import { RouteLinks } from '../../router/consts';
+import { RouteLinks } from '../../router/route-links.ts';
 import { Spinner } from '../../components/spinner/spinner';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { ReducerName } from '../../types/reducer-name';

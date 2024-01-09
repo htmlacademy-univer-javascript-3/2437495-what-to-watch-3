@@ -1,14 +1,14 @@
 import React, { useLayoutEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { Header } from '../../components/header';
-import { RouteLinks } from '../../router/consts';
+import { RouteLinks } from '../../router/route-links.ts';
 import { Poster } from '../../components/poster';
 import { AddReviewForm } from '../../components/add-review-form';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { Spinner } from '../../components/spinner/spinner';
 import { ReducerName } from '../../types/reducer-name';
 import { fetchFilm } from '../../store/api-actions';
-import { Page404 } from '../page-404';
+import { NotFound404 } from '../not-found-404';
 
 const AddReviewPage: React.FC = () => {
   const { id } = useParams();
@@ -64,7 +64,7 @@ const AddReviewPage: React.FC = () => {
       <AddReviewForm filmId={film.id} />
     </section>
   ) : (
-    <Page404 />
+    <NotFound404 />
   );
 };
 export const AddReview = React.memo(AddReviewPage);

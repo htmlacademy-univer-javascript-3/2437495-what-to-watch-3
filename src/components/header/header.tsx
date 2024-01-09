@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 import { Logo } from '../logo';
 import { Link, useNavigate } from 'react-router-dom';
-import { RouteLinks } from '../../router/consts';
+import { RouteLinks } from '../../router/route-links.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { ReducerName } from '../../types/reducer-name';
-import { AuthorizationStatus } from '../../types/authorization-status';
+import { AuthStatus } from '../../types/auth-status.ts';
 import { logout } from '../../store/api-actions';
 
 const enum ImgStyles {
@@ -29,7 +29,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({
   );
   const user = useAppSelector((state) => state[ReducerName.Authorzation].user);
 
-  const hasAccess = authorizationStatus === AuthorizationStatus.AUTHORIZED;
+  const hasAccess = authorizationStatus === AuthStatus.AUTHORIZED;
 
   const dispatch = useAppDispatch();
 

@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios';
 import { Film } from '../types/film';
 import { Review } from '../types/review';
 import { User } from '../types/user';
-import { AuthorizationData } from '../types/authorization-data';
+import { AuthData } from '../types/auth-data.ts';
 
 export const fetchFilms = createAsyncThunk<
   Film[],
@@ -34,7 +34,7 @@ export const checkAuth = createAsyncThunk<
 
 export const login = createAsyncThunk<
   User,
-  AuthorizationData,
+  AuthData,
   {
     dispatch: AppDispatch;
     state: State;
