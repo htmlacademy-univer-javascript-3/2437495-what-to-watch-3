@@ -1,7 +1,7 @@
 import React from 'react';
 import { Footer } from '../../components/footer';
 import { Header } from '../../components/header';
-import { RouteLinks } from '../../router/consts';
+import { RouteLinks } from '../../router/route-links.ts';
 import { Link } from 'react-router-dom';
 
 const NotFoundPage: React.FC = () => (
@@ -23,4 +23,4 @@ const NotFoundPage: React.FC = () => (
     <Footer />
   </div>
 );
-export const Page404 = React.memo(NotFoundPage);
+export const NotFound404 = React.memo(NotFoundPage);

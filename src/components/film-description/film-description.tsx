@@ -1,8 +1,8 @@
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Tabs } from './tabs';
-import { Overview } from './tab-panels/overview';
-import { Details as FilmDetails } from './tab-panels/details';
-import { Reviews as FilmReviews } from './tab-panels/reviews';
+import { Overview } from './panels/overview';
+import { Details as FilmDetails } from './panels/details';
+import { Reviews as FilmReviews } from './panels/reviews';
 import { Film } from '../../types/film';
 
 interface FilmDescriptionProps {

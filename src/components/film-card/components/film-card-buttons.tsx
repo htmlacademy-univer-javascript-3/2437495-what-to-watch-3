@@ -1,10 +1,10 @@
 import React, { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { RouteLinks } from '../../../router/consts';
+import { RouteLinks } from '../../../router/route-links.ts';
 import { useAppSelector, useAppDispatch } from '../../../hooks/store';
 import { setFavorite } from '../../../store/api-actions';
 import { ReducerName } from '../../../types/reducer-name';
-import { AuthorizationStatus } from '../../../types/authorization-status';
+import { AuthStatus } from '../../../types/auth-status.ts';
 
 const enum ButtonSize {
   WIDTH = 19,
@@ -28,7 +28,7 @@ const ButtonsContainerComponent: React.FC<FilmCardButtonsProps> = ({
   const authorizationStatus = useAppSelector(
     (state) => state[ReducerName.Authorzation].authorizationStatus
   );
-  const notAuth = authorizationStatus === AuthorizationStatus.NOT_AUTHORIZED;
+  const notAuth = authorizationStatus === AuthStatus.NOT_AUTHORIZED;
 
   const handleSetFavorite = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();

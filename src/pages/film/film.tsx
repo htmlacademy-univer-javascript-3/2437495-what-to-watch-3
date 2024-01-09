@@ -4,15 +4,15 @@ import { FilmCardButtons } from '../../components/film-card/components/film-card
 import { FilmsList } from '../../components/catalog/components/films-list';
 import { Footer } from '../../components/footer';
 import { Navigate, useParams } from 'react-router-dom';
-import { RouteLinks } from '../../router/consts';
+import { RouteLinks } from '../../router/route-links.ts';
 import { Poster } from '../../components/poster';
 import { FilmDescription } from '../../components/film-description/film-description';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { Spinner } from '../../components/spinner/spinner';
 import { ReducerName } from '../../types/reducer-name';
 import { fetchFilm, fetchReviews, fetchSimilar } from '../../store/api-actions';
-import { AuthorizationStatus } from '../../types/authorization-status';
-import { Page404 } from '../page-404';
+import { AuthStatus } from '../../types/auth-status.ts';
+import { NotFound404 } from '../not-found-404';
 
 const FilmPage: React.FC = () => {
   const { id } = useParams();
@@ -20,7 +20,7 @@ const FilmPage: React.FC = () => {
   const isAuth =
     useAppSelector(
       (state) => state[ReducerName.Authorzation].authorizationStatus
-    ) === AuthorizationStatus.AUTHORIZED;
+    ) === AuthStatus.AUTHORIZED;
 
   const dispatch = useAppDispatch();
   const film = useAppSelector((state) => state[ReducerName.Film].film);
@@ -96,7 +96,7 @@ const FilmPage: React.FC = () => {
       </div>
     </>
   ) : (
-    <Page404 />
+    <NotFound404 />
   );
 };
 export const Film = React.memo(FilmPage);

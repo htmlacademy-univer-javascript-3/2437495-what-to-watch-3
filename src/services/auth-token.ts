@@ -1,13 +1,13 @@
 const AUTH_TOKEN_KEY_NAME = 'auth-token';
 
-export type Token = string;
+export type authToken = string;
 
-export const getToken = (): Token => {
+export const getToken = (): authToken => {
   const token = localStorage.getItem(AUTH_TOKEN_KEY_NAME);
   return token ?? '';
 };
 
-export const saveToken = (token: Token): void => {
+export const saveToken = (token: authToken): void => {
   localStorage.setItem(AUTH_TOKEN_KEY_NAME, token);
 };
 

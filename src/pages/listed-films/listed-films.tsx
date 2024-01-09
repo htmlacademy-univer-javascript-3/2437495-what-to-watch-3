@@ -161,4 +161,4 @@ const FilmInListPage: React.FC = () => (
     </div>
   </>
 );
-export const FilmInList = React.memo(FilmInListPage);
+export const ListedFilms = React.memo(FilmInListPage);
